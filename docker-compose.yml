@@ -1,0 +1,14 @@
+web:
+    image: nginx:latest
+    ports:
+        - "8000:80"
+    volumes:
+        - ./http_testrail.conf:/etc/nginx/conf.d/default.conf
+        - ./testrail:/testrail
+    links:
+        - php:php
+
+php:
+    image: testrail:build
+    volumes:
+        - ./testrail:/testrail
