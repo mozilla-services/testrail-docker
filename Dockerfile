@@ -1,6 +1,6 @@
 FROM php:5.6-fpm
 
-RUN apt-get update && apt-get -y install --no-install-recommends curl unzip
+RUN apt-get update && apt-get -y install --no-install-recommends curl
 
 # download ioncube, extract to /opt/ioncube
 RUN curl -sS http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz > /tmp/ioncube.tar.gz && \
