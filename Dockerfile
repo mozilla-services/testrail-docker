@@ -1,5 +1,8 @@
 FROM php:5.6-fpm
 
+WORKDIR /app
+COPY . /app
+
 RUN apt-get update && apt-get -y install --no-install-recommends curl
 
 # download ioncube, extract to /opt/ioncube
