@@ -17,3 +17,5 @@ RUN docker-php-ext-install mysql
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 EXPOSE 9000
+
+# CMD is inherited from php:5.6fpm - it is php-fpm
