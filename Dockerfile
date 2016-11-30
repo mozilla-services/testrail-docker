@@ -14,6 +14,12 @@ RUN curl -sS http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu
 RUN docker-php-ext-install ldap
 
+# for testrail background task
+RUN docker-php-ext-install zip
+
+# for bugzilla defect plugin
+RUN docker-php-ext-install xmlrpc
+
 # mysql extension (deprecated) required for testrail
 RUN docker-php-ext-install mysql
 
