@@ -3,7 +3,7 @@ FROM php:5.6-fpm
 WORKDIR /app
 COPY . /app
 
-RUN apt-get update && apt-get -y install --no-install-recommends curl libldap2-dev
+RUN apt-get update && apt-get -y install --no-install-recommends curl libldap2-dev zlib1g-dev
 
 # download ioncube, extract to /opt/ioncube
 RUN curl -sS http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz > /tmp/ioncube.tar.gz && \
