@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . /app
 
 RUN apt-get update \
-      && apt-get -y install --no-install-recommends curl zlib1g-dev libxml2-dev
+      && apt-get -y install --no-install-recommends curl zlib1g-dev libxml2-dev vim
 
 # download ioncube, extract to /opt/ioncube
 RUN curl -sS http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz > /tmp/ioncube.tar.gz && \
