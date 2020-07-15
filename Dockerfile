@@ -67,4 +67,4 @@ RUN chmod 0755 /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 WORKDIR /var/www/testrail
 EXPOSE 9000
-VOLUME ['/var/www/testrail']
+VOLUME /var/www/testrail
