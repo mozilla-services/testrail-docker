@@ -62,6 +62,5 @@ RUN mkdir -p /var/www/testrail/config \
 COPY entrypoint.sh / 
 RUN chmod 0755 /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["php-fpm", "-F"]
 WORKDIR /var/www/testrail
 EXPOSE 9000

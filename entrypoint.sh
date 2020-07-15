@@ -27,4 +27,4 @@ while /bin/true; do
 done &
   echo "##############"
 
-docker-php-entrypoint /usr/local/sbin/php-fpm
+docker-php-entrypoint /usr/local/sbin/php-fpm -F
