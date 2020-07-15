@@ -42,7 +42,10 @@ RUN docker-php-ext-install curl            \
 
 RUN wget --no-check-certificate -O /tmp/testrail.zip ${ARG_URL}                                            \
       && mkdir -p /var/www/testrail                                                                        \
-      &&  mkdir -p /opt/testrail/attachments /opt/testrail/reports /opt/testrail/logs /opt/testrail/audit  \
+      &&  mkdir -p /opt/testrail/attachments \
+                   /opt/testrail/reports     \
+                   /opt/testrail/logs        \
+                   /opt/testrail/audit                                                                     \
       && unzip /tmp/testrail.zip -d /var/www/                                                              \
       && rm /tmp/testrail.zip                                                                              \
       && chown -R www-data:www-data /var/www/testrail                                                      \
@@ -64,3 +67,4 @@ RUN chmod 0755 /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 WORKDIR /var/www/testrail
 EXPOSE 9000
+VOLUME ['/var/www/testrail']
