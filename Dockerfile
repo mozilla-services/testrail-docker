@@ -40,16 +40,22 @@ RUN docker-php-ext-install curl            \
       && docker-php-ext-install xmlrpc     \
       && docker-php-ext-install zip        
 
-RUN wget --no-check-certificate -O /tmp/testrail.zip ${ARG_URL}                                            \
-      && mkdir -p /var/www/testrail                                                                        \
+# RUN wget --no-check-certificate -O /tmp/testrail.zip ${ARG_URL}                                            \
+#       && mkdir -p /var/www/testrail                                                                        \
+#       &&  mkdir -p /opt/testrail/attachments \
+#                    /opt/testrail/reports     \
+#                    /opt/testrail/logs        \
+#                    /opt/testrail/audit                                                                     \
+#       && unzip /tmp/testrail.zip -d /var/www/                                                              \
+#       && rm /tmp/testrail.zip                                                                              \
+#       && chown -R www-data:www-data /var/www/testrail                                                      \
+#       && chown -R www-data:www-data /opt/testrail
+#
+RUN mkdir -p /var/www/testrail                 \
       &&  mkdir -p /opt/testrail/attachments \
                    /opt/testrail/reports     \
                    /opt/testrail/logs        \
-                   /opt/testrail/audit                                                                     \
-      && unzip /tmp/testrail.zip -d /var/www/                                                              \
-      && rm /tmp/testrail.zip                                                                              \
-      && chown -R www-data:www-data /var/www/testrail                                                      \
-      && chown -R www-data:www-data /opt/testrail
+                   /opt/testrail/audit        
 
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
@@ -59,8 +65,8 @@ RUN wget  -O /tmp/ioncube.tar.gz http://downloads.ioncube.com/loader_downloads/i
       && echo zend_extension=/opt/ioncube/ioncube_loader_lin_${ARG_PHP_VERSION}.so >> /usr/local/etc/php/php.ini                         \
       && rm -f /tmp/ioncube.tar.gz
 
-RUN mkdir -p /var/www/testrail/config \
-      && chown -R www-data:www-data /var/www/testrail/config
+RUN addgroup --gid 10001 app
+RUN adduser --gid 10001 --uid 10001 --home /app --shell /sbin/nologin --no-create-home --disabled-password --gecos we,dont,care,yeah app
 
 COPY entrypoint.sh / 
 RUN chmod 0755 /entrypoint.sh
@@ -68,3 +74,4 @@ ENTRYPOINT ["/entrypoint.sh"]
 WORKDIR /var/www/testrail
 EXPOSE 9000
 VOLUME /var/www/testrail
+USER app
