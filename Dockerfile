@@ -40,6 +40,7 @@ RUN docker-php-ext-install curl            \
       && docker-php-ext-install xmlrpc     \
       && docker-php-ext-install zip        
 
+# This will download the latest release from GuRock. We might not want that.
 # RUN wget --no-check-certificate -O /tmp/testrail.zip ${ARG_URL}                                            \
 #       && mkdir -p /var/www/testrail                                                                        \
 #       &&  mkdir -p /opt/testrail/attachments \
@@ -67,7 +68,7 @@ RUN wget  -O /tmp/ioncube.tar.gz http://downloads.ioncube.com/loader_downloads/i
 
 RUN addgroup --gid 10001 app
 RUN adduser --gid 10001 --uid 10001 --home /app --shell /sbin/nologin --no-create-home --disabled-password --gecos we,dont,care,yeah app
-
+RUN rm -rf /usr/local/etc/php-fpm*
 COPY entrypoint.sh / 
 RUN chmod 0755 /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
