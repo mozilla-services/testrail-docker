@@ -17,6 +17,7 @@ RUN apt-get update \
         libcurl4-gnutls-dev  \
         libfontconfig1       \
         libldap2-dev         \
+        libonig5             \
         libxml2-dev          \
         mariadb-client       \
         openssl              \
