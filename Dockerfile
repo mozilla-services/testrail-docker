@@ -17,7 +17,7 @@ RUN apt-get update \
         libfontconfig1       \
         libldap2-dev         \
         libonig5             \
-        libonig5-dev         \
+        libonig-dev          \
         libxml2-dev          \
         mariadb-client       \
         openssl              \
