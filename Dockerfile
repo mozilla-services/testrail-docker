@@ -1,7 +1,6 @@
 FROM php:7.4-fpm
 ARG ARG_PHP_VERSION=7.2
 ARG ARG_IONCUBE_VERSION=10.3.2
-ARG ARG_URL=https://secure.gurock.com/downloads/testrail/testrail-latest-ion71.zip
 ENV TR_DEFAULT_TASK_EXECUTION=60
 ENV TR_CONFIGPATH="/var/www/testrail/config/"
 ENV TR_DEFAULT_LOG_DIR="/opt/testrail/logs/"
@@ -18,6 +17,7 @@ RUN apt-get update \
         libfontconfig1       \
         libldap2-dev         \
         libonig5             \
+        libonig5-dev         \
         libxml2-dev          \
         mariadb-client       \
         openssl              \
@@ -44,7 +44,7 @@ RUN docker-php-ext-install curl            \
 # This will download the latest release from GuRock. We might not want that.
 # RUN wget --no-check-certificate -O /tmp/testrail.zip ${ARG_URL}                                            \
 #       && mkdir -p /var/www/testrail                                                                        \
-#       &&  mkdir -p /opt/testrail/attachments \
+#       && mkdir -p /opt/testrail/attachments  \
 #                    /opt/testrail/reports     \
 #                    /opt/testrail/logs        \
 #                    /opt/testrail/audit                                                                     \
