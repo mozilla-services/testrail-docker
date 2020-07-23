@@ -19,6 +19,8 @@ RUN apt-get update \
         libonig5             \
         libonig-dev          \
         libxml2-dev          \
+        libzip4              \
+        libzip-dev           \
         mariadb-client       \
         openssl              \
         unzip                \
