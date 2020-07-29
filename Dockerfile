@@ -1,6 +1,8 @@
 FROM php:7.4-fpm
-ARG ARG_PHP_VERSION=7.2
-ARG ARG_IONCUBE_VERSION=10.3.2
+# Change this as needed to match container
+ARG ARG_PHP_VERSION=7.4
+# Change this to update
+ARG ARG_IONCUBE_VERSION=10.4.1 
 ENV TR_DEFAULT_TASK_EXECUTION=60
 ENV TR_CONFIGPATH="/var/www/testrail/config/"
 ENV TR_DEFAULT_LOG_DIR="/opt/testrail/logs/"
