@@ -72,7 +72,7 @@ RUN wget  -O /tmp/ioncube.tar.gz http://downloads.ioncube.com/loader_downloads/i
       && rm -f /tmp/ioncube.tar.gz
 
 RUN addgroup --gid 10001 app
-RUN adduser --gid 10001 --uid 10001 --home /app --shell /sbin/nologin --no-create-home --disabled-password --gecos we,dont,care,yeah app
+RUN adduser --gid 10001 --uid 10001 --home /app --shell /sbin/nologin --disabled-password --gecos we,dont,care,yeah app
 RUN rm -rf /usr/local/etc/php-fpm*
 COPY entrypoint.sh / 
 RUN chmod 0755 /entrypoint.sh
