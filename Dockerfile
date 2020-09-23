@@ -11,25 +11,25 @@ ENV TR_DEFAULT_REPORT_DIR="/opt/testrail/reports/"
 ENV TR_DEFAULT_ATTACHMENT_DIR="/opt/testrail/attachments/"
 ENV OPENSSL_CONF=/etc/ssl/
 
-RUN apt-get update \
+RUN apt-get update                                  \
       && apt-get -y install --no-install-recommends \
-        curl                 \
-        iputils-ping         \
-        libcurl4-gnutls-dev  \
-        libfontconfig1       \
-        libldap2-dev         \
-        libonig5             \
-        libonig-dev          \
-        libxml2-dev          \
-        libzip4              \
-        libzip-dev           \
-        mariadb-client       \
-        openssl              \
-        unzip                \
-        vim-nox              \
-        wget                 \
-        zip                  \
-        zlib1g-dev           \
+        curl                                        \
+        iputils-ping                                \
+        libcurl4-gnutls-dev                         \
+        libfontconfig1                              \
+        libldap2-dev                                \
+        libonig5                                    \
+        libonig-dev                                 \
+        libxml2-dev                                 \
+        libzip4                                     \
+        libzip-dev                                  \
+        mariadb-client                              \
+        openssl                                     \
+        unzip                                       \
+        vim-nox                                     \
+        wget                                        \
+        zip                                         \
+        zlib1g-dev                                  \
       && apt-get clean                              \
       && rm -rf /var/lib/apt/lists/*
 
@@ -58,17 +58,19 @@ RUN docker-php-ext-install curl            \
 #       && chown -R www-data:www-data /opt/testrail
 #
 RUN mkdir -p /var/www/testrail                 \
-      &&  mkdir -p /opt/testrail/attachments \
-                   /opt/testrail/reports     \
-                   /opt/testrail/logs        \
+      &&  mkdir -p /opt/testrail/attachments   \
+                   /opt/testrail/reports       \
+                   /opt/testrail/logs          \
                    /opt/testrail/audit
 
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
-RUN wget  -O /tmp/ioncube.tar.gz http://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64_${ARG_IONCUBE_VERSION}.tar.gz  \
-      && tar -xzf /tmp/ioncube.tar.gz -C /tmp                                                                                            \
-      && mv /tmp/ioncube /opt/ioncube                                                                                                    \
-      && rm -f /tmp/ioncube.tar.gz
+RUN wget  -O /tmp/ioncube.tar.gz                                                                              \
+      http://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64_${ARG_IONCUBE_VERSION}.tar.gz  \
+      && tar -xzf /tmp/ioncube.tar.gz -C /tmp                                                                 \
+      && mv /tmp/ioncube /opt/ioncube                                                                         \
+      && rm -f /tmp/ioncube.tar.gz                                                                            \
+      && echo zend_extension=/opt/ioncube/ioncube_loader_lin_${ARG_PHP_VERSION}.so >> /usr/local/etc/php/conf.d/ioncube-php.ini
 
 RUN addgroup --gid 10001 app
 RUN adduser --gid 10001 --uid 10001 --home /app --shell /sbin/nologin --disabled-password --gecos we,dont,care,yeah app
