@@ -38,15 +38,9 @@ jobs:
 
             export DOCKER_IMAGE="mozilla/${CIRCLE_PROJECT_REPONAME}:upgrade-to-v7"
 
-            if [ -n "${CIRCLE_TAG}" ]; then
-              export DOCKER_IMAGE="mozilla/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}"
-            fi
-
-            if [ "${CIRCLE_BRANCH}" == "master" ] || [ -n "${CIRCLE_TAG}" ]; then
-              docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-              docker tag app:build mozilla/testrail:upgrade-to-v7
-              docker push mozilla/testrail:upgrade-to-v7
-            fi
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker tag app:build mozilla/testrail:upgrade-to-v7
+            docker push mozilla/testrail:upgrade-to-v7
       - store_artifacts:
           path: version.json
 workflows:
