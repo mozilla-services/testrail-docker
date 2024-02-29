@@ -35,18 +35,6 @@ RUN docker-php-ext-install gd              \
       && docker-php-ext-install pdo_mysql  \
       && docker-php-ext-install zip
 
-# This will download the latest release from GuRock. We might not want that.
-# RUN wget --no-check-certificate -O /tmp/testrail.zip ${ARG_URL}                                            \
-#       && mkdir -p /var/www/testrail                                                                        \
-#       && mkdir -p /opt/testrail/attachments  \
-#                    /opt/testrail/reports     \
-#                    /opt/testrail/logs        \
-#                    /opt/testrail/audit                                                                     \
-#       && unzip /tmp/testrail.zip -d /var/www/                                                              \
-#       && rm /tmp/testrail.zip                                                                              \
-#       && chown -R www-data:www-data /var/www/testrail                                                      \
-#       && chown -R www-data:www-data /opt/testrail
-#
 RUN mkdir -p /var/www/testrail                 \
       &&  mkdir -p /opt/testrail/attachments   \
                    /opt/testrail/reports       \
