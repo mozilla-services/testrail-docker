@@ -36,11 +36,18 @@ jobs:
             CIRCLE_BRANCH : ${CIRCLE_BRANCH}
             EOF
 
-            export DOCKER_IMAGE="mozilla/${CIRCLE_PROJECT_REPONAME}:upgrade-to-v7"
+            if [ -n "${CIRCLE_TAG}" ]; then
+              DOCKER_IMAGE="mozilla/testrail:${CIRCLE_TAG}"
+            elif [ "${CIRCLE_BRANCH}" = "master" ]; then
+              DOCKER_IMAGE="mozilla/testrail:latest"
+            else
+              DOCKER_IMAGE="mozilla/testrail:${CIRCLE_BRANCH}"
+            fi
 
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-            docker tag app:build mozilla/testrail:upgrade-to-v7
-            docker push mozilla/testrail:upgrade-to-v7
+            docker tag app:build ${DOCKER_IMAGE}
+            docker push ${DOCKER_IMAGE}
+
       - store_artifacts:
           path: version.json
 workflows:
