@@ -15,6 +15,7 @@ ENV OPENSSL_CONF=/etc/ssl/
 
 RUN apt-get update                                  \
       && apt-get -y install --no-install-recommends \
+        fontconfig                                  \
         iputils-ping                                \
         libfreetype6-dev                            \
         libjpeg-dev                                 \
