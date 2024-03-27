@@ -16,6 +16,8 @@ ENV OPENSSL_CONF=/etc/ssl/
 RUN apt-get update                                  \
       && apt-get -y install --no-install-recommends \
         iputils-ping                                \
+        libfreetype6-dev                            \
+        libjpeg-dev                                 \
         libldap2-dev                                \
         libpng-dev                                  \
         libuv1                                      \
@@ -28,7 +30,8 @@ RUN apt-get update                                  \
       && apt-get clean                              \
       && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu
+RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
+      && docker-php-ext-configure gd --with-jpeg --with-freetype
 
 RUN docker-php-ext-install gd              \
       && docker-php-ext-install ldap       \
