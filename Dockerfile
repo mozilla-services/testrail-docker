@@ -15,9 +15,13 @@ ENV OPENSSL_CONF=/etc/ssl/
 
 RUN apt-get update                                  \
       && apt-get -y install --no-install-recommends \
+        fontconfig                                  \
         iputils-ping                                \
+        libfreetype6-dev                            \
+        libjpeg-dev                                 \
         libldap2-dev                                \
         libpng-dev                                  \
+        libuv1                                      \
         libzip-dev                                  \
         mariadb-client                              \
         unzip                                       \
@@ -27,7 +31,8 @@ RUN apt-get update                                  \
       && apt-get clean                              \
       && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu
+RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
+      && docker-php-ext-configure gd --with-jpeg --with-freetype
 
 RUN docker-php-ext-install gd              \
       && docker-php-ext-install ldap       \
@@ -35,18 +40,6 @@ RUN docker-php-ext-install gd              \
       && docker-php-ext-install pdo_mysql  \
       && docker-php-ext-install zip
 
-# This will download the latest release from GuRock. We might not want that.
-# RUN wget --no-check-certificate -O /tmp/testrail.zip ${ARG_URL}                                            \
-#       && mkdir -p /var/www/testrail                                                                        \
-#       && mkdir -p /opt/testrail/attachments  \
-#                    /opt/testrail/reports     \
-#                    /opt/testrail/logs        \
-#                    /opt/testrail/audit                                                                     \
-#       && unzip /tmp/testrail.zip -d /var/www/                                                              \
-#       && rm /tmp/testrail.zip                                                                              \
-#       && chown -R www-data:www-data /var/www/testrail                                                      \
-#       && chown -R www-data:www-data /opt/testrail
-#
 RUN mkdir -p /var/www/testrail                 \
       &&  mkdir -p /opt/testrail/attachments   \
                    /opt/testrail/reports       \
@@ -55,21 +48,41 @@ RUN mkdir -p /var/www/testrail                 \
 
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
-RUN wget  -O /tmp/ioncube.tar.gz                                                                              \
-      https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64_${ARG_IONCUBE_VERSION}.tar.gz \
-      && tar -xzf /tmp/ioncube.tar.gz -C /tmp                                                                 \
-      && mv /tmp/ioncube /opt/ioncube                                                                         \
-      && rm -f /tmp/ioncube.tar.gz                                                                            \
+RUN wget -O /tmp/ioncube.tar.gz                                                                         \
+      https://testrail-mirror.s3.amazonaws.com/ioncube_loaders_lin_x86-64_${ARG_IONCUBE_VERSION}.tar.gz \
+      && tar -xzf /tmp/ioncube.tar.gz -C /tmp                                                           \
+      && mv /tmp/ioncube /opt/ioncube                                                                   \
+      && rm -f /tmp/ioncube.tar.gz                                                                      \
       && echo zend_extension=/opt/ioncube/ioncube_loader_lin_${ARG_PHP_VERSION}.so >> /usr/local/etc/php/conf.d/ioncube-php.ini
 
-RUN addgroup --gid 10001 app
-RUN adduser --gid 10001 --uid 10001 --home /app --shell /sbin/nologin --disabled-password --gecos we,dont,care,yeah app
+RUN wget -O /tmp/multiarch-support.deb                                                      \
+      https://testrail-mirror.s3.amazonaws.com/multiarch-support_2.27-3ubuntu1.6_amd64.deb  \
+      && dpkg -i /tmp/multiarch-support.deb                                                 \
+      && rm -fv /tmp/multiarch-support.deb
+
+RUN wget -O /tmp/cassandra-cpp-driver.deb                                               \
+      https://testrail-mirror.s3.amazonaws.com/cassandra-cpp-driver_2.16.0-1_amd64.deb  \
+      && dpkg -i /tmp/cassandra-cpp-driver.deb                                          \
+      && rm -fv /tmp/cassandra-cpp-driver.deb
+
+RUN wget -O /tmp/cassandra.so                                                       \
+      https://testrail-mirror.s3.amazonaws.com/php/${ARG_PHP_VERSION}/cassandra.so  \
+      && mv /tmp/cassandra.so $(php -i | grep ^extension_dir | cut -d ' ' -f 3)     \
+      && echo extension=cassandra.so > /usr/local/etc/php/conf.d/cassandra.ini
+
+RUN addgroup --gid 10001 app                                                \
+      && adduser --gid 10001 --uid 10001 --home /app --shell /sbin/nologin  \
+         --disabled-password --gecos we,dont,care,yeah app
+
 RUN rm -rf /usr/local/etc/php-fpm*
+
 RUN echo '{"name":"${REPO_NAME}","version":"${GIT_TAG}","source":"${REPO_URL}","commit":"${GIT_COMMIT}"}' > version.json
 COPY version.json /app/
+
 COPY entrypoint.sh /
 RUN chmod 0755 /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
 WORKDIR /var/www/testrail
 EXPOSE 9000
 VOLUME /var/www/testrail
